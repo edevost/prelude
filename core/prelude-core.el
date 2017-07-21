@@ -45,12 +45,12 @@ With a prefix ARG always prompt for command to use."
   (let* ((current-file-name
           (if (eq major-mode 'dired-mode)
               (dired-get-file-for-visit)
-            buffer-file-name))
+             buffer-file-name))
          (open (pcase system-type
                  (`darwin "open")
                  ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
          (program (if (or arg (not open))
-                      (read-shell-command "Open current file with: ")
+                      (read-shell-command "Open current file witemacs word movement minibufferh: ")
                     open)))
     (start-process "prelude-open-with-process" nil program current-file-name)))
 
@@ -216,7 +216,7 @@ there's a region, all lines that region covers will be duplicated."
   (interactive "p")
   (pcase-let* ((origin (point))
                (`(,beg . ,end) (prelude-get-positions-of-line-or-region))
-               (region (buffer-substring-no-properties beg end)))
+                (region (buffer-substring-no-properties beg end)))
     (comment-or-uncomment-region beg end)
     (setq end (line-end-position))
     (-dotimes arg

@@ -1,0 +1,39 @@
+;;; -*- coding: utf-8 -*-
+
+;; ----- ido-last-directory-list -----
+(
+ ("/home/edevost/cookiecutter-python/" . "docs/")
+)
+
+;; ----- ido-work-directory-list -----
+(
+ "/home/edevost/cookiecutter-python/docs/"
+ "/home/edevost/cookiecutter-python/"
+ "/home/edevost/cookiecutter-python/tests/"
+)
+
+;; ----- ido-work-file-list -----
+(
+ "tutorial.rst"
+ "contributing.rst"
+ "index.rst"
+ "README.rst"
+ "setup.py"
+ "conf.py"
+ "baked.py"
+ "requirements.txt"
+)
+
+;; ----- ido-dir-file-cache -----
+(
+ ("/home/edevost/cookiecutter-python/docs/" (22760 61640 357853 264000) "console_script_setup.rst" "tests.rst" "./" "setup.rst" "baked_project.rst" "modules.rst" "conf.py" "Makefile" "contributing.rst" "prompts.rst" "tutorial.rst" "troubleshooting.rst" "../" "index.rst")
+
+ ("/home/edevost/cookiecutter-python/" (22760 61178 226344 984000) "README.rst" "{{cookiecutter.project_slug}}/" "LICENSE" "docs/" "hooks/" "tests/" "./" "setup.cfg" "cookiecutter.json" "setup.py" ".gitignore" ".git/" "CONTRIBUTING.rst" "requirements.txt" "../")
+
+ ("/home/edevost/cookiecutter-python/tests/" (22760 55082 572431 678000) "baked.py" "__init__.pyc" "./" "test_bake.py" "test_setup.py" "test_setup.pyc" "../")
+
+ ("/home/edevost/cookiecutter-python/{{cookiecutter.project_slug}}/" (22760 55376 259374 838000) "README.rst" "descriptor/" "LICENSE" "docs/" "tests/" "./" "setup.cfg" ".editorconfig" ".pypirc" "CHANGELOG.rst" "AUTHORS.rst" "requirements/" "setup.py" ".gitignore" "CONTRIBUTING.rst" "requirements.txt" "../" "tox.ini" "MANIFEST.in")
+)
+
+;; ----- ido-unc-hosts-cache -----
+t
