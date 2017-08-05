@@ -39,9 +39,6 @@
 ;; You may delete these explanatory comments.
 (package-initialize)
 
-(setq gitlab-host "https://gitlab.com"
-      gitlab-username "ericdevost"
-      gitlab-password "rachid31")
 
 (defvar current-user
   (getenv
