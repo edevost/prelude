@@ -54,6 +54,7 @@ You can support the development of Prelude via
     - [Personalizing](#personalizing)
         - [Disabling whitespace-mode](#disabling-whitespace-mode)
         - [Disable flyspell-mode](#disable-flyspell-mode)
+- [Python ide](#python-ide)
 - [Caveats & Pitfalls](#caveats--pitfalls)
     - [Updating bundled packages](#updating-bundled-packages)
     - [Problems with flyspell-mode](#problems-with-flyspell-mode)
@@ -580,6 +581,33 @@ If you're not fond of spellchecking on the fly:
 ```lisp
 (setq prelude-flyspell nil)
 ```
+## Python ide
+
+To use prelude as a full python ide, the following
+packages need to be installed.
+
+```shell
+apt-get install virtualenv
+
+```lisp
+M-x package-install virtualenvwrapper
+
+```python
+pip install rope
+pip install jedi
+pip install flake8
+pip install importmagic
+```
+
+```lisp
+M-x package-install RET elpy
+
+```lisp
+(package-initialize)
+(elpy-enable)
+
+
+
 
 ## Caveats & Pitfalls
 
