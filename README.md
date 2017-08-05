@@ -586,11 +586,22 @@ If you're not fond of spellchecking on the fly:
 To use prelude as a full python ide, the following
 packages need to be installed.
 
+### Virtualenv
+
+Example on debian
+
 ```shell
 apt-get install virtualenv
+```
+Install virtualenvwrapper for emacs
 
 ```lisp
 M-x package-install virtualenvwrapper
+```
+
+### Elpy
+
+Python dependencies
 
 ```python
 pip install rope
@@ -599,15 +610,18 @@ pip install flake8
 pip install importmagic
 ```
 
+Elpy
+
 ```lisp
 M-x package-install RET elpy
+```
+
+Written in personal/preload/init.el
 
 ```lisp
 (package-initialize)
 (elpy-enable)
-
-
-
+```
 
 ## Caveats & Pitfalls
 
