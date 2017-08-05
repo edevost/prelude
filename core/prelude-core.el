@@ -36,6 +36,24 @@
 (require 'dash)
 (require 'ov)
 
+(defun prelude-open-with (arg)
+  "Open visited file in default external program.
+When in dired mode, open file under the cursor.
+
+With a prefix ARG always prompt for command to use."
+  (interactive "P")
+  (let* ((current-file-name
+          (if (eq major-mode 'dired-mode)
+              (dired-get-file-for-visit)
+             buffer-file-name))
+         (open (pcase system-type
+                 (`darwin "open")
+                 ((or `gnu `gnu/linux `gnu/kfreebsd) "xdg-open")))
+         (program (if (or arg (not open))
+                      (read-shell-command "Open current file witemacs word movement minibufferh: ")
+                    open)))
+    (start-process "prelude-open-with-process" nil program current-file-name)))
+
 (defun prelude-buffer-mode (buffer-or-name)
   "Retrieve the `major-mode' of BUFFER-OR-NAME."
   (with-current-buffer buffer-or-name
@@ -75,6 +93,105 @@ PROMPT sets the `read-string prompt."
           (propertize (format "A")
                       'display '(left-fringe right-triangle))
           'modification-hooks '(prelude-todo-ov-evaporate)))
+
+(defun prelude-get-positions-of-line-or-region ()
+  "Return positions (beg . end) of the current line
+or region."
+  (let (beg end)
+    (if (and mark-active (> (point) (mark)))
+        (exchange-point-and-mark))
+    (setq beg (line-beginning-position))
+    (if mark-active
+        (exchange-point-and-mark))
+    (setq end (line-end-position))
+    (cons beg end)))
+
+(defun prelude-duplicate-current-line-or-region (arg)
+  "Duplicates the current line or region ARG times.
+If there's no region, the current line will be duplicated.  However, if
+there's a region, all lines that region covers will be duplicated."
+  (interactive "p")
+  (pcase-let* ((origin (point))
+               (`(,beg . ,end) (prelude-get-positions-of-line-or-region))
+               (region (buffer-substring-no-properties beg end)))
+    (-dotimes arg
+      (lambda (n)
+        (goto-char end)
+        (newline)
+        (insert region)
+        (setq end (point))))
+    (goto-char (+ origin (* (length region) arg) arg))))
+
+(defun prelude-duplicate-and-comment-current-line-or-region (arg)
+  "Duplicates and comments the current line or region ARG times.
+If there's no region, the current line will be duplicated.  However, if
+there's a region, all lines that region covers will be duplicated."
+  (interactive "p")
+  (pcase-let* ((origin (point))
+               (`(,beg . ,end) (prelude-get-positions-of-line-or-region))
+                (region (buffer-substring-no-properties beg end)))
+    (comment-or-uncomment-region beg end)
+    (setq end (line-end-position))
+    (-dotimes arg
+      (lambda (n)
+        (goto-char end)
+        (newline)
+        (insert region)
+        (setq end (point))))
+    (goto-char (+ origin (* (length region) arg) arg))))
+
+(defun prelude-rename-buffer-and-file ()
+  "Rename current buffer and if the buffer is visiting a file, rename it too."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (rename-buffer (read-from-minibuffer "New name: " (buffer-name)))
+      (let ((new-name (read-file-name "New name: " filename)))
+        (cond
+         ((vc-backend filename) (vc-rename-file filename new-name))
+         (t
+          (rename-file filename new-name t)
+          (set-visited-file-name new-name t t)))))))
+
+(defun prelude-delete-file-and-buffer ()
+  "Kill the current buffer and deletes the file it is visiting."
+  (interactive)
+  (let ((filename (buffer-file-name)))
+    (when filename
+      (if (vc-backend filename)
+          (vc-delete-file filename)
+        (when (y-or-n-p (format "Are you sure you want to delete %s? " filename))
+          (delete-file filename delete-by-moving-to-trash)
+          (message "Deleted file %s" filename)
+          (kill-buffer))))))
+
+(defun prelude-view-url ()
+  "Open a new buffer containing the contents of URL."
+  (interactive)
+  (let* ((default (thing-at-point-url-at-point))
+         (url (read-from-minibuffer "URL: " default)))
+    (switch-to-buffer (url-retrieve-synchronously url))
+    (rename-buffer url t)
+    (goto-char (point-min))
+    (re-search-forward "^$")
+    (delete-region (point-min) (point))
+    (delete-blank-lines)
+    (set-auto-mode)))
+
+(defun prelude-cleanup-buffer-or-region ()
+  "Cleanup a region if selected, otherwise the whole buffer."
+  (interactive)
+  (call-interactively 'untabify)
+  (unless (member major-mode prelude-indent-sensitive-modes)
+    (call-interactively 'indent-region))
+  (whitespace-cleanup))
+
+(defun prelude-eval-and-replace ()
+  "Replace the preceding sexp with its value."
+  (interactive)
+  (let ((value (eval (preceding-sexp))))
+    (backward-kill-sexp)
+    (insert (format "%s" value))))
 
 (defun prelude-recompile-init ()
   "Byte-compile all your dotfiles again."
