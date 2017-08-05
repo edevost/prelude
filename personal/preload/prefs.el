@@ -9,7 +9,7 @@
 (add-to-list 'auto-mode-alist '("\\.sls\\'" . yaml-mode))
 (add-to-list 'auto-mode-alist '("\\.jinja\\'" . yaml-mode))
 
-(require 'ess-site)
+;;(require 'ess-site)
 
 
 ;;; Add neo-tree function
