@@ -20,7 +20,7 @@
 
 (setq projectile-switch-project-action 'neotree-projectile-action)
 
-(setq magit-git-executable "/usr/local/git/bin/git")
+;;(setq magit-git-executable "/usr/local/git/bin/git")
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Set emacs web search ;;;;;;;;;;;;;;;;
